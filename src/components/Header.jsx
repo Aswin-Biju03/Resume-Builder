@@ -22,7 +22,7 @@ function Header() {
           />
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Link to={"/"} className="text-white text-decoration-none">
+            <Link to={"/"} className="text-white text-decoration-none ms-3">
               {" "}
               rBuilder
             </Link>

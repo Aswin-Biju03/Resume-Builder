@@ -6,7 +6,7 @@ import Preview from "../components/Preview";
 function UserForm() {
   return (
     <div className="container">
-      <div className="row my-5">
+      <div className="row my-5 ">
         <div className="col-lg-6">
           <UserInput />
         </div>

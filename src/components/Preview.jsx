@@ -7,7 +7,7 @@ function Preview() {
     <div className=" w-100">
       <h2>FullName</h2>
       <p className="fs-6">Phone: 9598624575</p>
-      <p className="fs-6">Email: 9598624575</p>
+      <p className="fs-6">Email: email</p>
       <p className="fs-6">
         LinkedIn: <a href="">url</a>
       </p>
