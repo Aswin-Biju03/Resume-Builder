@@ -2,32 +2,34 @@ import React from "react";
 import Divider from "@mui/material/Divider";
 import { Button } from "@mui/material";
 
-function Preview() {
+function Preview({ resumeData }) {
   return (
     <div className=" w-100">
-      <h2>FullName</h2>
-      <p className="fs-6">Phone: 9598624575</p>
-      <p className="fs-6">Email: email</p>
+      <h2>{resumeData?.fullname}</h2>
+      <p className="fs-6">Phone: {resumeData?.phone}</p>
+      <p className="fs-6">Email: {resumeData?.email}</p>
       <p className="fs-6">
-        LinkedIn: <a href="">url</a>
+        LinkedIn: <a href="">{resumeData?.linkedin}</a>
       </p>
       <p className="fs-6">
-        GitHub: <a href="">url</a>
+        GitHub: <a href="">{resumeData?.github}</a>
       </p>
-      <p className="fs-6">Location: location</p>
+      <p className="fs-6">Location: {resumeData?.location}</p>
       <Divider className="bg-dark" />
       <h4 className="mt-3">Professional Summary</h4>
-      <p>summary</p>
+      <p>{resumeData?.summary}</p>
       <Divider className="bg-dark" />
       <h4 className="mt-3">Technical Skills</h4>
-      <Button variant="text-dark">Text</Button>
+      {resumeData?.skills?.map((item, index) => (
+        <Button className="text-dark border-dark m-1" key={index} variant="outlined">{item}</Button>
+      ))}
       <Divider className="bg-dark my-3" />
       <h4>Education</h4>
       <p className="fs-6">
-        Bachelors Degree in <b>degree</b>
+        Bachelors Degree in <b>{resumeData.degree}</b>
       </p>
-      <p className="fs-6">University/College Name</p>
-      <p className="fs-6">Year of Graduation</p>
+      <p className="fs-6">University/College : {resumeData.university}</p>
+      <p className="fs-6">Year of Graduation : {resumeData.passOut}</p>
     </div>
   );
 }
