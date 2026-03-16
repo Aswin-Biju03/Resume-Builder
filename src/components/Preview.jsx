@@ -26,10 +26,10 @@ function Preview({ resumeData }) {
       <Divider className="bg-dark my-3" />
       <h4>Education</h4>
       <p className="fs-6">
-        Bachelors Degree in <b>{resumeData.degree}</b>
+        Bachelors Degree in <b>{resumeData?.degree}</b>
       </p>
-      <p className="fs-6">University/College : {resumeData.university}</p>
-      <p className="fs-6">Year of Graduation : {resumeData.passOut}</p>
+      <p className="fs-6">University/College : {resumeData?.university}</p>
+      <p className="fs-6">Year of Graduation : {resumeData?.passOut}</p>
     </div>
   );
 }

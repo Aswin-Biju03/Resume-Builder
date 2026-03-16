@@ -13,6 +13,8 @@ import Select from "@mui/material/Select";
 import jobTypes from "../assets/jobRole.json";
 import skillJSON from "../assets/jobSkills.json";
 import summaryJSON from "../assets/summaries.json";
+import { useNavigate } from "react-router-dom";
+import { addResumeAPI } from "../services/allResumeAPIService";
 
 const steps = [
   "Basic Informations",
@@ -22,6 +24,7 @@ const steps = [
 ];
 
 function UserInput({ resumeData, setResumeData }) {
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = React.useState(0);
   console.log(resumeData);
 
@@ -183,6 +186,46 @@ function UserInput({ resumeData, setResumeData }) {
         return null;
     }
   };
+  const handleAddResume = async () => {
+    const {
+      fullname,
+      location,
+      job,
+      email,
+      phone,
+      linkedin,
+      github,
+      degree,
+      university,
+      passOut,
+      skills,
+      summary,
+    } = resumeData;
+    if (
+      fullname &&
+      location &&
+      job &&
+      email &&
+      phone &&
+      linkedin &&
+      github &&
+      degree &&
+      university &&
+      passOut &&
+      skills.length > 0 &&
+      summary
+    ) {
+      const response = await addResumeAPI(resumeData);
+      console.log(response);
+      if (response.status == 201) {
+        alert("Resume added successfully!!");
+        const resumeId = response.data.id;
+        navigate(`/resume/${resumeId}/view`);
+      } else {
+        alert("Please fill the form completely");
+      }
+    }
+  };
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper activeStep={activeStep}>
@@ -198,12 +241,10 @@ function UserInput({ resumeData, setResumeData }) {
       </Stepper>
       {activeStep === steps.length ? (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed
-          </Typography>
+          <Typography sx={{ mt: 2, mb: 1 }}>All steps completed</Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Box sx={{ flex: "1 1 auto" }} />
-            <Button>Finish</Button>
+            <Button onClick={handleAddResume}>Finish</Button>
           </Box>
         </React.Fragment>
       ) : (

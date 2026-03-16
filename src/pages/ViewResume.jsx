@@ -1,13 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaFileDownload } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { IoReloadOutline } from "react-icons/io5";
 import { IoArrowBack } from "react-icons/io5";
 import Preview from "../components/Preview";
 import Edit from "../components/Edit";
 import { Button } from "@mui/material";
+import { getResumeAPI } from "../services/allResumeAPIService";
 
 function ViewResume() {
+  const { id } = useParams();
+  const [resumeData, setResumeData] = useState({});
+  console.log(resumeData);
+
+  useEffect(() => {
+    getResumeData();
+  }, []);
+
+  const getResumeData = async () => {
+    if (id) {
+      const result = await getResumeAPI(id);
+      setResumeData(result.data);
+    }
+  };
+
   return (
     <div className="container">
       <div className="row my-5">
@@ -17,7 +33,9 @@ function ViewResume() {
             <button className="btn text-primary fs-2 me-2">
               <FaFileDownload />
             </button>
-            <Button className="btn"><Edit /></Button>
+            <Button className="btn">
+              <Edit />
+            </Button>
             <Link to={"/downloads"} className="btn text-danger fs-2 me-2">
               <IoReloadOutline />
             </Link>
@@ -26,7 +44,7 @@ function ViewResume() {
             </Link>
           </div>
           <div className="mt-5">
-            <Preview />
+            <Preview resumeData={resumeData}/>
           </div>
         </div>
         <div className="col-lg-2"></div>
