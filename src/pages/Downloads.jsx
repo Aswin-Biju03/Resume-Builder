@@ -1,10 +1,26 @@
 import { Button } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
+import { useState } from "react";
+import { getDownloadResumeAPI } from "../services/allResumeAPIService";
 
 function Downloads() {
+  const [allDownloads, setAllDownloads] = useState([]);
+
+  console.log(allDownloads);
+
+  useEffect(() => {
+    getAllDownloads();
+  }, []);
+
+  const getAllDownloads = async () => {
+    const result = await getDownloadResumeAPI();
+    if (result.status == 200) {
+      setAllDownloads(result.data);
+    }
+  };
   return (
     <div className="container">
       <div className="d-flex my-5 justify-content-between align-items-center">
