@@ -15,3 +15,11 @@ export const downloadResumeAPI = async (resumeData) => {
 export const getDownloadResumeAPI = async () => {
   return await apiService("GET", `/downloads`, {});
 };
+
+export const deleteDownloadResumeAPI = async (resumeId) => {
+  return await apiService("DELETE", `/downloads/${resumeId}`, {});
+};
+
+export const editResumeAPI = async (id,updateDetails) => {
+  return await apiService("PUT", `/allresumes/${id}`, updateDetails);
+};

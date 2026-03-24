@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useRef } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import jobTypes from "../assets/jobRole.json";
 import { FaEdit } from "react-icons/fa";
 import {
   FormControl,
@@ -12,6 +13,7 @@ import {
   TextField,
 } from "@mui/material";
 import { FaXmark } from "react-icons/fa6";
+import { editResumeAPI } from "../services/allResumeAPIService";
 const style = {
   position: "absolute",
   top: "50%",
@@ -26,11 +28,79 @@ const style = {
   p: 4,
 };
 
-function Edit() {
+function Edit({ resumeData, setResumeData }) {
+  const skillRef = useRef();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  console.log(resumeData);
 
+  const removeSkill = (skill) => {
+    setResumeData({
+      ...resumeData,
+      skills: resumeData?.skills?.filter((item) => item != skill),
+    });
+  };
+
+  const addSkill = (skill) => {
+    if (skill) {
+      if (
+        resumeData?.skills
+          ?.map((item) => item.toLowerCase())
+          ?.includes(skill.toLowerCase())
+      ) {
+        alert("Given Skill Already Exists !! . Add new Skill");
+      } else {
+        setResumeData({
+          ...resumeData,
+          skills: [...resumeData?.skills, skill],
+        });
+      }
+    } else {
+      alert("Add valid input");
+    }
+  };
+
+  const handleEditResume = async () => {
+    const {
+      fullname,
+      location,
+      job,
+      email,
+      phone,
+      linkedin,
+      github,
+      degree,
+      university,
+      passOut,
+      skills,
+      summary,
+    } = resumeData;
+
+    if (
+      fullname &&
+      location &&
+      job &&
+      email &&
+      phone &&
+      linkedin &&
+      github &&
+      degree &&
+      university &&
+      passOut &&
+      skills?.length > 0 &&
+      summary
+    ) {
+      const response = await editResumeAPI(resumeData?.id, resumeData);
+      console.log(response);
+      if(response.status==200){
+        alert("Resume updated Successfully")
+        handleClose()
+      }
+    }else{
+      alert("Please fill the form completely")
+    }
+  };
   return (
     <div>
       <Button className="btn text-secondary fs-2 me-2" onClick={handleOpen}>
@@ -51,11 +121,19 @@ function Edit() {
               <h3>Personal Details</h3>
               <div className="p-3 row">
                 <TextField
+                  value={resumeData.fullname}
+                  onChange={(e) =>
+                    setResumeData({ ...resumeData, fullname: e.target.value })
+                  }
                   id="standard-basic-name"
                   label="Full Name"
                   variant="standard"
                 />
                 <TextField
+                  value={resumeData.location}
+                  onChange={(e) =>
+                    setResumeData({ ...resumeData, location: e.target.value })
+                  }
                   id="standard-basic-loc"
                   label="Location"
                   variant="standard"
@@ -65,14 +143,19 @@ function Edit() {
                     Choose Job Title
                   </InputLabel>
                   <Select
+                    value={resumeData.job}
                     labelId="demo-simple-select-standard-label"
                     id="demo-simple-select-standard"
-                    label="Age"
+                    label="Job"
+                    onChange={(e) =>
+                      setResumeData({ ...resumeData, job: e.target.value })
+                    }
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
+                    {jobTypes.jobRoles.map((role) => (
+                      <MenuItem key={role} value={role}>
+                        {role}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </div>
@@ -81,21 +164,37 @@ function Edit() {
               <h3>Contact Details</h3>
               <div className="p-3 row">
                 <TextField
+                  value={resumeData.email}
+                  onChange={(e) =>
+                    setResumeData({ ...resumeData, email: e.target.value })
+                  }
                   id="standard-basic-name-email"
                   label="Email"
                   variant="standard"
                 />
                 <TextField
+                  value={resumeData.phone}
+                  onChange={(e) =>
+                    setResumeData({ ...resumeData, phone: e.target.value })
+                  }
                   id="standard-basic-phone"
                   label="Contact Number"
                   variant="standard"
                 />
                 <TextField
+                  value={resumeData.linkedin}
+                  onChange={(e) =>
+                    setResumeData({ ...resumeData, linkedin: e.target.value })
+                  }
                   id="standard-basic-linkedin"
                   label="Linkedin Link"
                   variant="standard"
                 />
                 <TextField
+                  value={resumeData.github}
+                  onChange={(e) =>
+                    setResumeData({ ...resumeData, github: e.target.value })
+                  }
                   id="standard-basic-github"
                   label="GitHub Link"
                   variant="standard"
@@ -106,16 +205,28 @@ function Edit() {
               <h3>Educational Details</h3>
               <div className="p-3 row">
                 <TextField
+                  value={resumeData.degree}
+                  onChange={(e) =>
+                    setResumeData({ ...resumeData, degree: e.target.value })
+                  }
                   id="standard-basic-name-email"
                   label="Bachelors Degree"
                   variant="standard"
                 />
                 <TextField
+                  value={resumeData.university}
+                  onChange={(e) =>
+                    setResumeData({ ...resumeData, university: e.target.value })
+                  }
                   id="standard-basic-phone"
                   label="University / College Name"
                   variant="standard"
                 />
                 <TextField
+                  value={resumeData.passOut}
+                  onChange={(e) =>
+                    setResumeData({ ...resumeData, passOut: e.target.value })
+                  }
                   id="standard-basic-linkedin"
                   label="Year of Graduation"
                   variant="standard"
@@ -126,17 +237,34 @@ function Edit() {
               <h3>Skills</h3>
               <div className="p-3 d-flex align-items-center justify-content-between">
                 <input
+                  ref={skillRef}
                   variant="text"
                   placeholder="Add Skill"
                   className="form-control"
                 />
-                <Button variant="text">Add</Button>
+                <Button
+                  onClick={() => {
+                    addSkill(skillRef.current.value);
+                  }}
+                  variant="text"
+                >
+                  Add
+                </Button>
               </div>
               <h5>Added Skills: </h5>
-              <div className="p-3 d-flex align-items-center justify-content-between">
-                <Button variant="contained" className="my-1">
-                  Skill <FaXmark className="ms-1" />
-                </Button>
+              <div className="p-3 d-flex justify-content-between flex-wrap">
+                {resumeData?.skills?.map((skill) => (
+                  <Button
+                    onClick={() => {
+                      removeSkill(skill);
+                    }}
+                    key={skill}
+                    variant="contained"
+                    className="my-1"
+                  >
+                    {skill} <FaXmark className="ms-1" />
+                  </Button>
+                ))}
               </div>
             </div>
             <div>
@@ -144,13 +272,19 @@ function Edit() {
               <div className="p-3 row">
                 <TextField
                   id="standard-basic-degree"
+                  value={resumeData?.summary}
+                  onChange={(e) =>
+                    setResumeData({ ...resumeData, summary: e.target.value })
+                  }
                   label="summary"
                   multiline
                   variant="standard"
                 />
               </div>
             </div>
-            <button className="btn btn-primary">Update</button>
+            <button onClick={handleEditResume} className="btn btn-primary">
+              Update
+            </button>
           </Box>
         </Box>
       </Modal>

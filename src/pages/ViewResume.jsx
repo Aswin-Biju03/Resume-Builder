@@ -69,7 +69,7 @@ function ViewResume() {
               <FaFileDownload />
             </button>
             <Button className="btn">
-              <Edit />
+              <Edit resumeData={resumeData} setResumeData={setResumeData} />
             </Button>
             <Link to={"/downloads"} className="btn text-danger fs-2 me-2">
               <IoReloadOutline />
