@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosinstance";
+import axiosInstance from "./axiosInstance";
 
 const apiService = async (httpMethod, url, reqBody) => {
   const reqConfig = {
